@@ -304,6 +304,19 @@ footer p {
     margin-top: 10px;
 }
 
+/* Registracija */
+.poruka-uspjeh {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.poruka-greska {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
 /* responzivnost */
 @media (max-width: 800px) {
     nav ul {

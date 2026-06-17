@@ -20,7 +20,7 @@
         <li><a href="index.php#parisien">PARISIEN</a></li>
         <li><a href="index.php#vivre">VIVRE</a></li>
         <li><a href="unos.php">UNOS</a></li>
-        <li><a href="#">ADMINISTRACIJA</a></li>
+        <li><a href="administrator.php">ADMINISTRACIJA</a></li>
     </ul>
 </nav>
 

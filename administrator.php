@@ -1,33 +1,65 @@
 <?php
+session_start();
 include 'connect.php';
 define('UPLPATH', 'img/');
 
-if (isset($_POST['delete'])) {
-    $id = $_POST['id'];
+$uspjesnaPrijava = false;
+$admin = false;
+$poruka = "";
 
-    $query = "DELETE FROM vijesti WHERE id=$id";
-    mysqli_query($dbc, $query) or die("Greška kod brisanja.");
+if (isset($_POST['prijava'])) {
+    $username = $_POST['username'];
+    $lozinka = $_POST['lozinka'];
+
+    $sql = "SELECT korisnicko_ime, lozinka, razina FROM korisnik WHERE korisnicko_ime = ?";
+    $stmt = mysqli_stmt_init($dbc);
+
+    if (mysqli_stmt_prepare($stmt, $sql)) {
+        mysqli_stmt_bind_param($stmt, "s", $username);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+        mysqli_stmt_bind_result($stmt, $imeKorisnika, $lozinkaKorisnika, $razinaKorisnika);
+        mysqli_stmt_fetch($stmt);
+
+        if (mysqli_stmt_num_rows($stmt) > 0 && password_verify($lozinka, $lozinkaKorisnika)) {
+            $_SESSION['username'] = $imeKorisnika;
+            $_SESSION['level'] = $razinaKorisnika;
+            $uspjesnaPrijava = true;
+
+            if ($razinaKorisnika == 1) {
+                $admin = true;
+            }
+        } else {
+            $poruka = "Neispravno korisničko ime ili lozinka. Prvo se morate registrirati.";
+        }
+    }
 }
 
-if (isset($_POST['update'])) {
+if (isset($_POST['logout'])) {
+    session_destroy();
+    header("Location: administrator.php");
+    exit();
+}
+
+if (isset($_POST['delete']) && isset($_SESSION['level']) && $_SESSION['level'] == 1) {
+    $id = $_POST['id'];
+    $query = "DELETE FROM vijesti WHERE id=$id";
+    mysqli_query($dbc, $query);
+}
+
+if (isset($_POST['update']) && isset($_SESSION['level']) && $_SESSION['level'] == 1) {
     $id = $_POST['id'];
     $title = $_POST['title'];
     $about = $_POST['about'];
     $content = $_POST['content'];
     $category = $_POST['category'];
-
-    if (isset($_POST['archive'])) {
-        $archive = 1;
-    } else {
-        $archive = 0;
-    }
+    $archive = isset($_POST['archive']) ? 1 : 0;
 
     $old_picture = $_POST['old_picture'];
     $picture = $_FILES['pphoto']['name'];
 
     if ($picture != '') {
-        $target_dir = 'img/' . $picture;
-        move_uploaded_file($_FILES['pphoto']['tmp_name'], $target_dir);
+        move_uploaded_file($_FILES['pphoto']['tmp_name'], 'img/' . $picture);
     } else {
         $picture = $old_picture;
     }
@@ -41,11 +73,8 @@ if (isset($_POST['update'])) {
                   arhiva='$archive'
               WHERE id=$id";
 
-    mysqli_query($dbc, $query) or die("Greška kod izmjene.");
+    mysqli_query($dbc, $query);
 }
-
-$query = "SELECT * FROM vijesti ORDER BY id DESC";
-$result = mysqli_query($dbc, $query);
 ?>
 
 <!DOCTYPE html>
@@ -75,9 +104,20 @@ $result = mysqli_query($dbc, $query);
 
 <main class="admin-stranica">
 
+<?php
+if (isset($_SESSION['level']) && $_SESSION['level'] == 1) {
+?>
+
     <h1>Administracija vijesti</h1>
 
+    <form method="POST">
+        <button type="submit" name="logout">Odjava</button>
+    </form>
+
     <?php
+    $query = "SELECT * FROM vijesti ORDER BY id DESC";
+    $result = mysqli_query($dbc, $query);
+
     while ($row = mysqli_fetch_array($result)) {
     ?>
 
@@ -92,7 +132,7 @@ $result = mysqli_query($dbc, $query);
             </div>
 
             <div class="form-item">
-                <label>Kratki sažetak vijesti</label>
+                <label>Kratki sažetak</label>
                 <textarea name="about" rows="4" class="form-field-textual"><?php echo $row['sazetak']; ?></textarea>
             </div>
 
@@ -112,14 +152,10 @@ $result = mysqli_query($dbc, $query);
             </div>
 
             <div class="form-item">
-                <label>Kategorija vijesti</label>
+                <label>Kategorija</label>
                 <select name="category" class="form-field-textual">
-                    <option value="Parisien" <?php if ($row['kategorija'] == 'Parisien') echo 'selected'; ?>>
-                        Parisien
-                    </option>
-                    <option value="Vivre mieux" <?php if ($row['kategorija'] == 'Vivre mieux') echo 'selected'; ?>>
-                        Vivre mieux
-                    </option>
+                    <option value="Parisien" <?php if ($row['kategorija'] == 'Parisien') echo 'selected'; ?>>Parisien</option>
+                    <option value="Vivre mieux" <?php if ($row['kategorija'] == 'Vivre mieux') echo 'selected'; ?>>Vivre mieux</option>
                 </select>
             </div>
 
@@ -139,7 +175,49 @@ $result = mysqli_query($dbc, $query);
 
     <?php
     }
+
+} else if (isset($_SESSION['level']) && $_SESSION['level'] == 0) {
+    echo "<p>Bok " . $_SESSION['username'] . "! Uspješno ste prijavljeni, ali nemate administratorska prava.</p>";
+
+    echo '
+    <form method="POST">
+        <button type="submit" name="logout">Odjava</button>
+    </form>
+    ';
+} else {
+?>
+
+    <h1>Prijava administratora</h1>
+
+    <p class="poruka-greska"><?php echo $poruka; ?></p>
+
+    <?php
+    if ($poruka != "") {
+        echo '<p><a href="registracija.php">Registriraj se ovdje</a></p>';
+    }
     ?>
+
+    <form action="administrator.php" method="POST">
+
+        <div class="form-item">
+            <label for="username">Korisničko ime</label>
+            <input type="text" id="username" name="username" class="form-field-textual" required>
+        </div>
+
+        <div class="form-item">
+            <label for="lozinka">Lozinka</label>
+            <input type="password" id="lozinka" name="lozinka" class="form-field-textual" required>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" name="prijava">Prijava</button>
+        </div>
+
+    </form>
+
+<?php
+}
+?>
 
 </main>
 
