@@ -262,6 +262,48 @@ footer p {
     line-height: 1.7;
 }
 
+.kategorija {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.tekst-clanka {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-top: 20px;
+}
+
+/* Administrator */
+.admin-stranica {
+    max-width: 900px;
+    margin: 50px auto 80px auto;
+    padding: 0 20px;
+}
+
+.admin-stranica h1 {
+    font-family: Arial, sans-serif;
+    font-size: 34px;
+    margin-bottom: 30px;
+}
+
+.admin-forma {
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 25px;
+    margin-bottom: 35px;
+}
+
+.admin-slika {
+    width: 180px;
+    height: 110px;
+    object-fit: cover;
+    display: block;
+    margin-top: 10px;
+}
+
 /* responzivnost */
 @media (max-width: 800px) {
     nav ul {

@@ -9,17 +9,17 @@
 <body>
 
 <header>
-    <a href="index.html">
+    <a href="index.php">
         <img src="img/logo.png" alt="Le Parisien">
     </a>
 </header>
 
 <nav>
     <ul>
-        <li><a href="index.html">HOME</a></li>
-        <li><a href="index.html#parisien">PARISIEN</a></li>
-        <li><a href="index.html#vivre">VIVRE</a></li>
-        <li><a href="unos.html">UNOS</a></li>
+        <li><a href="index.php">HOME</a></li>
+        <li><a href="index.php#parisien">PARISIEN</a></li>
+        <li><a href="index.php#vivre">VIVRE</a></li>
+        <li><a href="unos.php">UNOS</a></li>
         <li><a href="#">ADMINISTRACIJA</a></li>
     </ul>
 </nav>
@@ -61,7 +61,7 @@
         <div class="form-item checkbox-item">
             <label>
                 <input type="checkbox" name="archive">
-                Prikazati vijest na stranici
+                    Spremiti u arhivu / Sakriti vijest
             </label>
         </div>
 
