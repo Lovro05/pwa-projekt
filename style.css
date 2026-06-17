@@ -158,6 +158,110 @@ footer p {
     font-size: 14px;
 }
 
+/* UNOS VIJESTI */
+
+.forma-stranica {
+    max-width: 750px;
+    margin: 50px auto 80px auto;
+    padding: 0 20px;
+}
+
+.forma-stranica h1 {
+    font-family: Arial, sans-serif;
+    font-size: 34px;
+    margin-bottom: 30px;
+}
+
+.form-item {
+    margin-bottom: 22px;
+}
+
+.form-item label {
+    display: block;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.form-field-textual {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #bbb;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+}
+
+.checkbox-item label {
+    font-weight: normal;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.form-buttons button {
+    padding: 10px 25px;
+    border: none;
+    background-color: #111;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-buttons button:hover {
+    background-color: #0055aa;
+}
+
+/* PRIKAZ IZ PHP SKRIPTE */
+
+.prikaz-clanka {
+    max-width: 900px;
+    margin: 50px auto 80px auto;
+    padding: 0 20px;
+}
+
+.prikaz-clanka .category {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 25px;
+}
+
+.prikaz-clanka h1 {
+    font-family: Arial, sans-serif;
+    font-size: 32px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.prikaz-clanka .meta {
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.prikaz-clanka img {
+    width: 70%;
+    height: 30em;
+    object-fit: cover;
+    display: block;
+    margin: 30px auto;
+}
+
+.prikaz-clanka .about {
+    font-size: 18px;
+    font-style: italic;
+    margin-bottom: 25px;
+}
+
+.prikaz-clanka .content {
+    font-size: 16px;
+    line-height: 1.7;
+}
+
 /* responzivnost */
 @media (max-width: 800px) {
     nav ul {
